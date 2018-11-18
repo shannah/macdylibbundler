@@ -40,6 +40,11 @@ std::vector<Dependency> deps;
 std::set<std::string> rpaths;
 std::map<std::string, std::vector<std::string> > rpaths_per_file;
 
+static bool endsWith(const std::string& str, const std::string& suffix)
+{
+    return str.size() >= suffix.size() && 0 == str.compare(str.size()-suffix.size(), suffix.size(), suffix);
+}
+
 void changeLibPathsOnFile(std::string file_to_fix)
 {
     std::cout << "\n* Fixing dependencies on " << file_to_fix.c_str() << std::endl;
@@ -170,7 +175,7 @@ void addDependency(std::string path)
         if(dep.mergeIfSameAs(deps[n])) return;
     }
     
-    if(!Settings::isPrefixBundled(dep.getPrefix())) return;
+    if(!Settings::isPrefixBundled(dep.getPrefix()) && !Settings::shouldBundlePath(path)) return;
     
     deps.push_back(dep);
 }

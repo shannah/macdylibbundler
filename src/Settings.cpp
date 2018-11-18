@@ -25,6 +25,10 @@ THE SOFTWARE.
 #include "Settings.h"
 #include <vector>
 
+static bool startsWith(const std::string& s, const std::string& prefix) {
+    return s.size() >= prefix.size() && s.compare(0, prefix.size(), prefix) == 0;
+}
+
 namespace Settings
 {
 
@@ -86,12 +90,16 @@ bool isPrefixIgnored(std::string prefix)
 
     return false;
 }
-
+    bool shouldBundlePath(std::string path) {
+        if(path.find("@executable_path") != std::string::npos) return false;
+        if(startsWith(path, "/usr/lib/libc++")) return true;
+        return false;
+    }
 bool isPrefixBundled(std::string prefix)
 {
     if(prefix.find(".framework") != std::string::npos) return false;
     if(prefix.find("@executable_path") != std::string::npos) return false;
-    if(prefix.compare("/usr/lib/") == 0) return false;
+    if(prefix.compare("/usr/lib/") == 0 ) return false;
     if(isPrefixIgnored(prefix)) return false;
     
     return true;

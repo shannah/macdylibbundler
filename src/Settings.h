@@ -30,6 +30,7 @@ THE SOFTWARE.
 namespace Settings
 {
     
+    bool shouldBundlePath(std::string path);
 bool isPrefixBundled(std::string prefix);
 bool isPrefixIgnored(std::string prefix);
 void ignore_prefix(std::string prefix);
